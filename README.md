@@ -17,7 +17,19 @@ The `ToString` utility class in Java provides a customizable alternative to the 
 
 ## Usage
 
-### Basic Usage
+### Include Maven Dependency
+
+Add the following dependency to your `pom.xml` file:
+
+```xml
+<dependency>
+  <groupId>de.tilokowalski.util</groupId>
+  <artifactId>tostring-util</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+### Create Basic String
 
 To create a simple string representation of an object:
 
@@ -28,7 +40,7 @@ String simpleToString = ToString.create(yourObject);
 System.out.println(simpleToString);
 ```
 
-### Detailed Dump
+### Create Detailed Dump
 
 For a detailed, multi-line representation, including nested objects:
 
@@ -39,7 +51,7 @@ String detailedDump = ToString.createDump(yourObject);
 System.out.println(detailedDump);
 ```
 
-### Custom Representation
+### Create Custom Representation
 
 Create a custom string representation with specific settings:
 
