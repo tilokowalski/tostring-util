@@ -37,9 +37,11 @@ jobs:
 
     - name: Import GPG Key
       run: |
-        echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import
-      env:
-        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import
+      shell: bash
+
+    - name: List GPG keys (after import)
+      run: gpg --list-keys
 
     - name: Deploy to OSSRH
       run: mvn deploy -P release
