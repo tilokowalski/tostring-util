@@ -40,11 +40,7 @@ config_gpg() {
     exit 200
   fi
 
-  mkdir -p ~/.gnupg
-  chmod 700 ~/.gnupg
-  print "${GPG_SIGNING_KEY}" | base64 --decode > ~/.gnupg/private.key
-  chmod 600 ~/.gnupg/private.key
-  gpg --import --verbose ~/.gnupg/private.key
+  echo "${GPG_SIGNING_KEY}" | base64 --decode | gpg --import --verbose
 }
 
 config_maven() {
