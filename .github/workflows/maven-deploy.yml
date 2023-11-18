@@ -32,6 +32,8 @@ jobs:
 
       - name: Push Git Tags
         run: git push origin ${{ env.RELEASE_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
