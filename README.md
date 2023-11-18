@@ -81,9 +81,36 @@ System.out.println(customToString);
 
 Use this annotation on a field to prevent resolving it during the string conversion.
 
+```java
+public class YourClass {
+
+  @ToStringDontResolve
+  private List unresolvedList;
+
+  @ToStringDontResolve
+  private OtherClass unresolvedObject;
+
+  private String resolveMe;
+
+  // ...
+}
+```
+
 ### `@ToStringIgnore`
 
 Apply this annotation to a field you wish to exclude from the string representation.
+
+```java
+public class YourClass {
+
+  @ToStringIgnore
+  private String ignoredField;
+
+  private String includedField;
+
+  // ...
+}
+```
 
 ---
 
