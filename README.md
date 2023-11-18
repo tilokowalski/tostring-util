@@ -22,6 +22,7 @@ To create a simple string representation of an object:
 
 ```java
 YourClass yourObject = new YourClass();
+
 String simpleToString = ToString.create(yourObject);
 System.out.println(simpleToString);
 ```
@@ -31,7 +32,10 @@ System.out.println(simpleToString);
 For a detailed, multi-line representation, including nested objects:
 
 ```java
-ToString.createDump(anyObject);
+YourClass yourObject = new YourClass();
+
+String detailedDump = ToString.createDump(yourObject);
+System.out.println(detailedDump);
 ```
 
 ### Custom Representation
@@ -40,6 +44,13 @@ Create a custom string representation with specific settings:
 
 ```java
 ToString.createCustom(anyObject, delimiter, nesting, level, resolve);
+```
+
+```java
+YourClass yourObject = new YourClass();
+
+String customToString = ToString.createCustom(yourObject, ',', 0, ToString.TS_LEVEL_DEEP, true);
+System.out.println(customToString);
 ```
 
 | Parameter | Description |
