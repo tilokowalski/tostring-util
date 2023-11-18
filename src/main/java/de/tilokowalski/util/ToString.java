@@ -202,7 +202,7 @@ public class ToString {
      * Get the declared fields for a given object up to a certain level.
      *
      * @param object The object for which to get declared fields.
-     * @param level  The maximum level up to which to get fields.
+     * @param level The maximum level up to which to get fields.
      * @return A list of Fields for the object.
      */
     private ArrayList<Field> getDeclaredFields(Object object, int level) {
@@ -287,7 +287,7 @@ public class ToString {
      * Append the value of a given field to the StringBuilder that is passed through.
      *
      * @param result The StringBuilder to append to.
-     * @param field  The field whose value to append.
+     * @param field The field whose value to append.
      * @param object The object from which to get the field's value.
      * @return The updated StringBuilder.
      */
@@ -332,7 +332,7 @@ public class ToString {
     /**
      * Append the elements of a collection to the StringBuilder that is passed through.
      *
-     * @param result     The StringBuilder to append to.
+     * @param result The StringBuilder to append to.
      * @param collection The collection whose elements to append.
      * @return The updated StringBuilder.
      */
@@ -395,11 +395,11 @@ public class ToString {
     /**
      * Generates a custom string representation of an object using specified custom parameters.
      *
-     * @param object    The object to be represented as a string.
+     * @param object The object to be represented as a string.
      * @param delimiter Tthe character to be used as delimiter.
-     * @param nesting   The depth of the nested object, used for indentation.
-     * @param level     The level of class hierarchy to be explored.
-     * @param resolve   Whether to resolve nested objects or not.
+     * @param nesting The depth of the nested object, used for indentation.
+     * @param level The level of class hierarchy to be explored.
+     * @param resolve Whether to resolve nested objects or not.
      * @return String representation of the object.
      */
     public static String createCustom(Object object, char delimiter, int nesting, int level, boolean resolve) {
