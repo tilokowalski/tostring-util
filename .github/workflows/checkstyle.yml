@@ -8,12 +8,15 @@ on:
 jobs:
   checkstyle:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write 
 
     steps:
       - uses: actions/checkout@v4
       - uses: dbelyaev/action-checkstyle@master
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: .github/config/checkstyle.xml
           checkstyle_version: 10.12.5
           reporter: github-pr-review
