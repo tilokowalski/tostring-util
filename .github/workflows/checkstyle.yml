@@ -1,0 +1,20 @@
+name: Checkstyle Obedience
+
+on:
+  pull_request:
+    branches: [ develop ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          checkstyle_config: ./github/config/checkstyle.xml
+          checkstyle_version: 10.12.5
+          reporter: github-pr-review
+          level: error

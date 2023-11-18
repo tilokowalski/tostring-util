@@ -1,5 +1,7 @@
 # ToString Utility for Java
 
+![Checkstyle Obedience](https://github.com/tilokowalski/tostring-util/actions/workflows/checkstyle.yml/badge.svg)
+
 ## Introduction
 
 The `ToString` utility class in Java provides a customizable alternative to the traditional `toString()` method. It offers a human-readable string representation of any object, with options for single-line or multi-line formatting, resolving nested objects, and exploring class hierarchies.
