@@ -1,0 +1,90 @@
+name: Maven CI/CD Pipeline
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java and Maven Central Repository
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: Import GPG Key
+        run: |
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpg-connect-agent reloadagent /bye
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --yes --import --pinentry-mode loopback
+        shell: bash
+
+      - name: Extract Tag Name
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Set Project Version to Tag Name
+        run: mvn versions:set -DnewVersion=${{ env.TAG_NAME }}
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset (JAR File)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}.jar
+          asset_name: tostring-util-${{ env.TAG_NAME }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload Release Asset (Sources)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-sources.jar
+          asset_name: tostring-util-${{ env.TAG_NAME }}-sources.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload Release Asset (Javadoc)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-javadoc.jar
+          asset_name: tostring-util-${{ env.TAG_NAME }}-javadoc.jar
+          asset_content_type: application/java-archive
+
+      - name: Publish package to Maven Central Repository
+        run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
