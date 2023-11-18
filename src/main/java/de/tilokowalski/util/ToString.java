@@ -9,11 +9,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class provides a utility to generate a human-readable string representation of any object.
  * It's a customizable alternative to the traditional toString() method.
  */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ToString {
 
     /**
@@ -69,49 +74,43 @@ public class ToString {
     /**
      * The object for which the string representation will be generated.
      */
+    @Getter
+    @Setter
     private Object object;
 
     /**
      * The character to be used as delimiter between fields.
      */
+    @Getter
+    @Setter
     private char delimiter;
 
     /**
      * Depth of the nested object, used for indentation.
      */
+    @Getter
+    @Setter
     private int nesting;
 
     /**
      * Level of class hierarchy to be explored.
      */
+    @Getter
+    @Setter
     private int level;
 
     /**
      * Whether to resolve nested objects or not.
      */
+    @Getter
+    @Setter
     private boolean resolve;
 
     /**
      * List of objects that have already been resolved during the string conversion.
      */
+    @Getter
     private static ArrayList<Object> alreadyResolved = new ArrayList<Object>();
-
-    /**
-     * A private constructor to set the properties of the ToString object.
-     *
-     * @param object The object for which to build the string representation.
-     * @param delimiter The delimiter to be used in the string representation.
-     * @param nesting The depth of the nested object, used for indentation.
-     * @param level The level of class hierarchy to be explored.
-     * @param resolve Whether to resolve nested objects or not.
-     */
-    private ToString(Object object, char delimiter, int nesting, int level, boolean resolve) {
-        setObject(object);
-        setDelimiter(delimiter);
-        setNesting(nesting);
-        setLevel(level);
-        setResolve(resolve);
-    }
 
     /**
      * Overrides the toString method to return a string representation of the object.
@@ -180,7 +179,7 @@ public class ToString {
                     }
 
                     stringBuilder = appendValue(stringBuilder, field, getObject());
-                    
+
                     if (firstField) {
                         firstField = false;
                     }
@@ -203,7 +202,7 @@ public class ToString {
      * Get the declared fields for a given object up to a certain level.
      *
      * @param object The object for which to get declared fields.
-     * @param level The maximum level up to which to get fields.
+     * @param level  The maximum level up to which to get fields.
      * @return A list of Fields for the object.
      */
     private ArrayList<Field> getDeclaredFields(Object object, int level) {
@@ -258,7 +257,7 @@ public class ToString {
         if (Modifier.isStatic(field.getModifiers())) {
             return false;
         }
-        
+
         if (field.getAnnotation(ToStringIgnore.class) != null) {
             return false;
         }
@@ -288,7 +287,7 @@ public class ToString {
      * Append the value of a given field to the StringBuilder that is passed through.
      *
      * @param result The StringBuilder to append to.
-     * @param field The field whose value to append.
+     * @param field  The field whose value to append.
      * @param object The object from which to get the field's value.
      * @return The updated StringBuilder.
      */
@@ -333,7 +332,7 @@ public class ToString {
     /**
      * Append the elements of a collection to the StringBuilder that is passed through.
      *
-     * @param result The StringBuilder to append to.
+     * @param result     The StringBuilder to append to.
      * @param collection The collection whose elements to append.
      * @return The updated StringBuilder.
      */
@@ -362,105 +361,6 @@ public class ToString {
      */
     private static String getIndentation(int n) {
         return new String("\t").repeat(n + 1);
-    }
-
-    /**
-     * Get the object for which the string representation is being built.
-     *
-     * @return The object for which the string representation is being built.
-     */
-    public Object getObject() {
-        return object;
-    }
-
-    /**
-     * Set the object for which the string representation will be built.
-     *
-     * @param object The object for which to build the string representation.
-     */
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    /**
-     * Get the delimiter to be used in the string representation.
-     *
-     * @return The delimiter to be used in the string representation.
-     */
-    public char getDelimiter() {
-        return delimiter;
-    }
-
-    /**
-     * Set the delimiter to be used in the string representation.
-     *
-     * @param delimiter The delimiter to be used in the string representation.
-     */
-    public void setDelimiter(char delimiter) {
-        this.delimiter = delimiter;
-    }
-
-    /**
-     * Returns the current nesting level of the object hierarchy being converted to string.
-     *
-     * @return An integer representing the nesting level.
-     */
-    public int getNesting() {
-        return nesting;
-    }
-
-    /**
-     * Sets the nesting level for the object hierarchy to be converted to string.
-     *
-     * @param nesting An integer indicating the desired nesting level.
-     */
-    public void setNesting(int nesting) {
-        this.nesting = nesting;
-    }
-
-    /**
-     * Returns the current level of the class hierarchy to be explored in the string conversion.
-     *
-     * @return An integer representing the current level.
-     */
-    public int getLevel() {
-        return level;
-    }
-
-    /**
-     * Sets the level of the class hierarchy to be explored in the string conversion.
-     *
-     * @param level An integer indicating the desired level.
-     */
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    /**
-     * Returns the current setting of whether to resolve nested objects or not.
-     *
-     * @return A boolean indicating whether to resolve nested objects or not.
-     */
-    public boolean isResolve() {
-        return resolve;
-    }
-
-    /**
-     * Sets the setting of whether to resolve nested objects or not.
-     *
-     * @param resolve A boolean indicating whether to resolve nested objects or not.
-     */
-    public void setResolve(boolean resolve) {
-        this.resolve = resolve;
-    }
-
-    /**
-     * Returns the list of objects that have already been resolved in the string conversion.
-     *
-     * @return A list of Objects that have been already resolved.
-     */
-    public static ArrayList<Object> getAlreadyResolved() {
-        return alreadyResolved;
     }
 
     /**
@@ -495,11 +395,11 @@ public class ToString {
     /**
      * Generates a custom string representation of an object using specified custom parameters.
      *
-     * @param object The object to be represented as a string.
+     * @param object    The object to be represented as a string.
      * @param delimiter Tthe character to be used as delimiter.
-     * @param nesting The depth of the nested object, used for indentation.
-     * @param level The level of class hierarchy to be explored.
-     * @param resolve Whether to resolve nested objects or not.
+     * @param nesting   The depth of the nested object, used for indentation.
+     * @param level     The level of class hierarchy to be explored.
+     * @param resolve   Whether to resolve nested objects or not.
      * @return String representation of the object.
      */
     public static String createCustom(Object object, char delimiter, int nesting, int level, boolean resolve) {
