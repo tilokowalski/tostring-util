@@ -17,8 +17,6 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: Build with Maven
       run: mvn clean install
@@ -36,6 +34,18 @@ jobs:
         release_name: Release ${{ steps.extract_version.outputs.version }}
         draft: false
         prerelease: false
+
+    - name: List GPG keys (before import)
+      run: gpg --list-keys
+
+    - name: Import GPG Key
+      run: |
+        echo -n "$GPG_PRIVATE_KEY" | base64 --decode | gpg --import
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+    - name: List GPG keys (after import)
+      run: gpg --list-keys
 
     - name: Deploy to OSSRH
       run: mvn deploy -P release
