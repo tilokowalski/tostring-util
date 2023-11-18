@@ -37,7 +37,19 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      # TODO Create GitHub Release
+      - name: Get Release Version
+        id: get_version
+        run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: Release ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
 
       - name: Publish package to Maven Central Repository
         run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
