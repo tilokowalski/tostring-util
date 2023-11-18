@@ -25,7 +25,12 @@ jobs:
 
       - name: Import GPG Key
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpg-connect-agent reloadagent /bye
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import --batch --yes --pinentry-mode loopback
         shell: bash
 
       - name: Build with Maven
