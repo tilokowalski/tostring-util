@@ -1,6 +1,7 @@
 # ToString Utility for Java
 
 ![Checkstyle Obedience](https://github.com/tilokowalski/tostring-util/actions/workflows/checkstyle.yml/badge.svg)
+![Maven CI/CD Pipeline](https://github.com/tilokowalski/tostring-util/actions/workflows/maven-deploy.yml/badge.svg)
 
 ## Introduction
 
