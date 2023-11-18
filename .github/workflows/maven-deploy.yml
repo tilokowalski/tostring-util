@@ -28,6 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Make builder script executable
+        run: chmod +x builder.sh
+        
       - name: Configure Maven Credentials and GPG Key
         run: ./builder.sh config_maven
         env:
