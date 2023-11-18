@@ -128,6 +128,7 @@ public class ToString {
      *
      * @return String representation of the object's attributes.
      * @throws Exception When any error occurs while generating the string.
+     * @Test
      */
     private String buildFromAttributes() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
@@ -174,7 +175,7 @@ public class ToString {
                     }
 
                     stringBuilder = appendValue(stringBuilder, field, getObject());
-                    
+
                     if (firstField) {
                         firstField = false;
                     }
@@ -252,7 +253,7 @@ public class ToString {
         if (Modifier.isStatic(field.getModifiers())) {
             return false;
         }
-        
+
         if (field.getAnnotation(ToStringIgnore.class) != null) {
             return false;
         }
