@@ -16,11 +16,10 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Perform Checkstyle with Check Reporter
+      - name: Perform Checkstyle
         uses: dbelyaev/action-checkstyle@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           checkstyle_config: .github/config/checkstyle.xml
           checkstyle_version: 10.12.5
-          reporter: github-pr-check
-          level: error
+          reporter: github-pr-review
