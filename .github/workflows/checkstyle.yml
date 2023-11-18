@@ -18,10 +18,8 @@ jobs:
 
       - name: Perform Checkstyle
         uses: dbelyaev/action-checkstyle@master
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN : ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: .github/config/checkstyle.xml
           checkstyle_version: 10.12.5
-          reporter: github-pr-review
+          reporter: github-pr-check
