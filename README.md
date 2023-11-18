@@ -42,8 +42,7 @@ ToString.createCustom(anyObject, delimiter, nesting, level, resolve);
 
 | Parameter | Description |
 |---|---|
-| `anyObject` | The object for which the string representation is to be generated. |
-| `delimiter` | Character used to separate fields in the output. For example, `,` for single-line or `\\n` for multi-line representation. |
+| `delimiter` | Character used to separate fields in the output. For example, `,` for single-line or `\n` for multi-line representation. |
 | `nesting` | Integer specifying the depth of the currently nested object. This will usually be `0`, except for custom indentation from the beginning.  |
 | `level` | Determines the level of class hierarchy to be explored. Use `ToString.TS_LEVEL_ONLY` for the object's direct fields, `ToString.TS_LEVEL_DEEP` for full hierarchy exploration, or any other integer. |
 | `resolve` | Boolean flag indicating whether to resolve nested objects. `true` will resolve them, while `false` will avoid resolving nested objects. |
