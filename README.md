@@ -19,7 +19,7 @@ The `ToString` utility class in Java provides a customizable alternative to the 
 
 ### Include Maven Dependency
 
-Add the following dependency to your `pom.xml` file:
+You can get the ToString Utility from Maven Central Repository. Add the following dependency to your `pom.xml` file:
 
 ```xml
 <dependency>

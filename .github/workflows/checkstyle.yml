@@ -17,4 +17,3 @@ jobs:
           checkstyle_config: .github/config/checkstyle.xml
           checkstyle_version: 10.12.5
           reporter: github-pr-review
-          level: error
