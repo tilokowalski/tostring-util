@@ -14,37 +14,18 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Check GPG Version
-        run: |
-          gpg --version
-
-      - name: Configure JDK 17
+      - name: Set up Java and Maven Central Repository
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: '17'
           distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
 
-      - name: Configuring Maven Cache
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Modify Builder Script Permission
-        run: chmod +x builder.sh
-
-      - name: Configure Maven Credentials and GPG Key
-        run: ./builder.sh config_maven
+      - name: Publish package to Maven Central Repository
+        run: mvn --batch-mode deploy
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-
-      - name: Configure GPG Key
-        run: ./builder.sh config_gpg
-        env:
-          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-
-      - name: Publish to Sonatype Staging Repository
-        run: ./builder.sh remote
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          

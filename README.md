@@ -29,7 +29,7 @@ Add the following dependency to your `pom.xml` file:
 </dependency>
 ```
 
-### Create Basic String
+### Create Basic String Representation
 
 To create a simple string representation of an object:
 
