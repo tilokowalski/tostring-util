@@ -21,7 +21,9 @@ The `ToString` utility class in Java provides a customizable alternative to the 
 To create a simple string representation of an object:
 
 ```java
-ToString.create(anyObject);
+YourClass yourObject = new YourClass();
+String simpleToString = ToString.create(yourObject);
+System.out.println(simpleToString);
 ```
 
 ### Detailed Dump
