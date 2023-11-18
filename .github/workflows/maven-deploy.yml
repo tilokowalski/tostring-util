@@ -30,11 +30,6 @@ jobs:
       - name: Create Git Tag
         run: git tag ${{ env.RELEASE_VERSION }}
 
-      - name: Push Git Tags
-        run: git push origin ${{ env.RELEASE_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
