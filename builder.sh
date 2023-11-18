@@ -39,7 +39,7 @@ config_gpg() {
     println "ERROR: No GPG_SIGNING_KEY defined"
     exit 200
   fi
-
+    
   echo "${GPG_SIGNING_KEY}" | base64 --decode | gpg --import --verbose
 }
 
