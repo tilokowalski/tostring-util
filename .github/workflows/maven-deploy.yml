@@ -37,11 +37,10 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
+      # TODO Create GitHub Release
+
       - name: Publish package to Maven Central Repository
         run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-
-      # TODO Create GitHub Release
-          
