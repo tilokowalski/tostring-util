@@ -1,10 +1,5 @@
 package de.tilokowalski.util;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.Modifier;
@@ -14,6 +9,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class provides a utility to generate a human-readable string representation of any object.
