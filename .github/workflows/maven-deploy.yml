@@ -93,8 +93,8 @@ jobs:
           asset_name: tostring-util-${{ env.TAG_NAME }}-javadoc.jar
           asset_content_type: application/java-archive
 
-      # - name: Publish package to Maven Central Repository
-      #   run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
-      #   env:
-      #     MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      #     MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      - name: Publish package to Maven Central Repository
+        run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
