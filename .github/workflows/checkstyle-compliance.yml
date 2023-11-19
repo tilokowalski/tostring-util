@@ -16,7 +16,7 @@ jobs:
       - name: Checkstyle (PR-Review Reporter)
         uses: dbelyaev/action-checkstyle@master
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: .github/workflows/config/checkstyle.xml
           checkstyle_version: 10.12.5
           reporter: github-pr-review
@@ -24,7 +24,7 @@ jobs:
       - name: Checkstyle (PR-Check Reporter)
         uses: dbelyaev/action-checkstyle@master
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: .github/workflows/config/checkstyle.xml
           checkstyle_version: 10.12.5
           reporter: github-pr-check
