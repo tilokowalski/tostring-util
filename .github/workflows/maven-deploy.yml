@@ -48,6 +48,7 @@ jobs:
         with:
           commit_message: Update README.md with new version
           branch: master
+          push_options: '--force'
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
@@ -56,7 +57,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.TAG_NAME }}
           release_name: Release ${{ env.TAG_NAME }}
@@ -66,7 +67,7 @@ jobs:
       - name: Upload Release Asset (JAR File)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/tostring-util-${{ env.TAG_NAME }}.jar
@@ -76,7 +77,7 @@ jobs:
       - name: Upload Release Asset (Sources)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-sources.jar
@@ -86,7 +87,7 @@ jobs:
       - name: Upload Release Asset (Javadoc)
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-javadoc.jar
