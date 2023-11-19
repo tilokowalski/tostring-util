@@ -48,7 +48,6 @@ jobs:
         with:
           commit_message: Update README.md with new version
           branch: master
-          push_options: '--force'
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
