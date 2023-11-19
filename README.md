@@ -1,10 +1,14 @@
-# ToString Utility for Java
+<h1 align="center">
+    ToString Utility for Java
+</h1>
+<p align="center">
+    <img alt="Maven CI/CD Pipeline" src="https://github.com/tilokowalski/tostring-util/actions/workflows/maven-deploy.yml/badge.svg">
+    <img alt="Checkstyle Compliance" src="https://github.com/tilokowalski/tostring-util/actions/workflows/checkstyle-compliance.yml/badge.svg">
+</p>
 
-![Maven CI/CD Pipeline](https://github.com/tilokowalski/tostring-util/actions/workflows/maven-deploy.yml/badge.svg)
-
-## Introduction
-
-The `ToString` utility class in Java provides a customizable alternative to the traditional `toString()` method. It offers a human-readable string representation of any object, with options for single-line or multi-line formatting, resolving nested objects, and exploring class hierarchies.
+<p align="center">
+    The `ToString` utility class in Java provides a customizable alternative to the traditional `toString()` method. It offers a human-readable string representation of any object, with options for single-line or multi-line formatting, resolving nested objects, and exploring class hierarchies.
+</p>
 
 ## Features
 
