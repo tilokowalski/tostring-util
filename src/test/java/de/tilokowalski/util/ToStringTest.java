@@ -28,6 +28,9 @@ public class ToStringTest {
      */
     private Map<String, String> map;
 
+    /**
+     * An example person object to be tested.
+     */
     private Person person;
 
     /**
