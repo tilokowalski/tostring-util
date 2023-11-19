@@ -88,3 +88,12 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+      - name: Update README.md with New Version
+        run: |
+          sed -i 's/<version>.*<\/version>/<version>${{ env.TAG_NAME }}<\/version>/' README.md
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update README.md with new version
