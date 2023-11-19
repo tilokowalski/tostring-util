@@ -22,7 +22,7 @@
 
 ### Include Maven Dependency
 
-You can get the ToString Utility from Maven Central Repository. Add the following dependency to your `pom.xml` file:
+You can get the ToString Utility from [Maven Central Repository](https://central.sonatype.com/artifact/de.tilokowalski.util/tostring-util). Add the following dependency to your `pom.xml` file:
 
 ```xml
 <dependency>
