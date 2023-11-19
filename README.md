@@ -28,7 +28,7 @@ You can get the ToString Utility from Maven Central Repository. Add the followin
 <dependency>
   <groupId>de.tilokowalski.util</groupId>
   <artifactId>tostring-util</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 

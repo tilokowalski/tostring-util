@@ -7,7 +7,7 @@
 
     <groupId>de.tilokowalski.util</groupId>
     <artifactId>tostring-util</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>ToString Util</name>
     <description>Provides a utility to generate a human-readable string representation of any object as a customizable alternative to the traditional toString() method.</description>
