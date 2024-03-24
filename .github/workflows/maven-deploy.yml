@@ -37,7 +37,7 @@ jobs:
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Set Project Version to Tag Name
-        run: mvn versions:set -DnewVersion=${{ env.TAG_NAME }}
+        run: mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ env.TAG_NAME }}
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
