@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +18,7 @@ import lombok.Setter;
  * This class provides a utility to generate a human-readable string representation of any object.
  * It's a customizable alternative to the traditional toString() method.
  */
+@Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ToString {
 
@@ -75,42 +76,37 @@ public class ToString {
      * The object for which the string representation will be generated.
      */
     @Getter
-    @Setter
     private Object object;
 
     /**
      * The character to be used as delimiter between fields.
      */
     @Getter
-    @Setter
     private char delimiter;
 
     /**
      * Depth of the nested object, used for indentation.
      */
     @Getter
-    @Setter
     private int nesting;
 
     /**
      * Level of class hierarchy to be explored.
      */
     @Getter
-    @Setter
     private int level;
 
     /**
      * Whether to resolve nested objects or not.
      */
     @Getter
-    @Setter
     private boolean resolve;
 
     /**
      * List of objects that have already been resolved during the string conversion.
      */
     @Getter
-    private static ArrayList<Object> alreadyResolved = new ArrayList<Object>();
+    private final static List<Object> alreadyResolved = new ArrayList<>();
 
     /**
      * Overrides the toString method to return a string representation of the object.
@@ -124,6 +120,7 @@ public class ToString {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -144,15 +141,14 @@ public class ToString {
         }
 
         if (!getAlreadyResolved().contains(object)) {
-            if (getObject() instanceof Collection<?>) {
-                Collection<?> collection = (Collection<?>) getObject();
-                stringBuilder = appendCollection(stringBuilder, collection);
+            if (getObject() instanceof Collection<?> collection) {
+                appendCollection(stringBuilder, collection);
             } else if (getObject() instanceof Map<?, ?>) {
                 Collection<?> collection = ((Map<?, ?>) getObject()).values();
-                stringBuilder = appendCollection(stringBuilder, collection);
+                appendCollection(stringBuilder, collection);
             } else if (getObject().getClass().isArray()) {
-                Collection<?> collection = Arrays.asList(getObject());
-                stringBuilder = appendCollection(stringBuilder, collection);
+                Collection<?> collection = List.of(getObject());
+                appendCollection(stringBuilder, collection);
             } else {
                 if (getDelimiter() == ToString.TS_DELIMITER_ML) {
                     stringBuilder.append(getDelimiter());
@@ -178,7 +174,7 @@ public class ToString {
                         stringBuilder.append(getIndentation(getNesting()));
                     }
 
-                    stringBuilder = appendValue(stringBuilder, field, getObject());
+                    appendValue(stringBuilder, field, getObject());
 
                     if (firstField) {
                         firstField = false;
@@ -205,8 +201,8 @@ public class ToString {
      * @param level The maximum level up to which to get fields.
      * @return A list of Fields for the object.
      */
-    private ArrayList<Field> getDeclaredFields(Object object, int level) {
-        ArrayList<Field> result = new ArrayList<Field>();
+    private List<Field> getDeclaredFields(Object object, int level) {
+        List<Field> result = new ArrayList<>();
 
         Class<?> currentClass = object.getClass();
 
@@ -258,11 +254,7 @@ public class ToString {
             return false;
         }
 
-        if (field.getAnnotation(ToStringIgnore.class) != null) {
-            return false;
-        }
-
-        return true;
+        return field.getAnnotation(ToStringIgnore.class) == null;
     }
 
     /**
@@ -289,31 +281,30 @@ public class ToString {
      * @param result The StringBuilder to append to.
      * @param field The field whose value to append.
      * @param object The object from which to get the field's value.
-     * @return The updated StringBuilder.
      */
-    private StringBuilder appendValue(StringBuilder result, Field field, Object object) {
+    private void appendValue(StringBuilder result, Field field, Object object) throws IllegalAccessException {
         result.append(field.getName());
         result.append(TS_EQUALS);
 
-        Object value = null;
+        Object value;
 
-        try {
-            value = field.get(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        value = field.get(object);
 
         if (value == null) {
             result.append(TS_EXPR_NULL);
-        } else if (field.getType().isPrimitive()) {
-            result.append(value);
-        } else if (field.getType() == String.class) {
-            result.append("" + TS_PARANTHESIS_STRING + value + TS_PARANTHESIS_STRING);
-        } else if (field.getType() == Date.class) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        } else if (value instanceof Enum) {
+            result.append(((Enum<?>) value).name());
+        } else if (value instanceof LocalDate date) {
+            result.append(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        } else if (value instanceof LocalDateTime dateTime) {
+            result.append(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        } else if (value instanceof Date) { // Legacy java.util.Date support
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             result.append(format.format(value));
-        } else if (field.getType() == Integer.class) {
-            result.append((int) value);
+        } else if (field.getType().isPrimitive() || value instanceof Number) {
+            result.append(value);
+        } else if (value instanceof String) {
+            result.append(TS_PARANTHESIS_STRING).append(value).append(TS_PARANTHESIS_STRING);
         } else {
             boolean resolve = isResolve();
 
@@ -324,9 +315,7 @@ public class ToString {
             result.append(ToString.createCustom(value, getDelimiter(), getNesting() + 1, getLevel(), resolve));
         }
 
-        ToString.alreadyResolved.add(object);
-
-        return result;
+        ToString.addAlreadyResolved(object);
     }
 
     /**
@@ -334,9 +323,8 @@ public class ToString {
      *
      * @param result The StringBuilder to append to.
      * @param collection The collection whose elements to append.
-     * @return The updated StringBuilder.
      */
-    private StringBuilder appendCollection(StringBuilder result, Collection<?> collection) {
+    private void appendCollection(StringBuilder result, Collection<?> collection) {
         if (collection.isEmpty() || !isResolve()) {
             result.append(collection.size());
         } else {
@@ -349,8 +337,6 @@ public class ToString {
             result.append(getDelimiter());
             result.append(getIndentation(getNesting() - 1));
         }
-
-        return result;
     }
 
     /**
@@ -360,7 +346,7 @@ public class ToString {
      * @return A string of n indentation characters.
      */
     private static String getIndentation(int n) {
-        return new String("\t").repeat(n + 1);
+        return "\t".repeat(n + 1);
     }
 
     /**
