@@ -44,44 +44,17 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          name: Release ${{ env.TAG_NAME }}
           tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset (JAR File)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}.jar
-          asset_name: tostring-util-${{ env.TAG_NAME }}.jar
-          asset_content_type: application/java-archive
-
-      - name: Upload Release Asset (Sources)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-sources.jar
-          asset_name: tostring-util-${{ env.TAG_NAME }}-sources.jar
-          asset_content_type: application/java-archive
-
-      - name: Upload Release Asset (Javadoc)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/tostring-util-${{ env.TAG_NAME }}-javadoc.jar
-          asset_name: tostring-util-${{ env.TAG_NAME }}-javadoc.jar
-          asset_content_type: application/java-archive
+          files: |
+            ./target/tostring-util-${{ env.TAG_NAME }}.jar
+            ./target/tostring-util-${{ env.TAG_NAME }}-sources.jar
+            ./target/tostring-util-${{ env.TAG_NAME }}-javadoc.jar
 
       - name: Publish package to Maven Central Repository
         run: mvn -B deploy --file pom.xml -Dgpg.executable=gpg -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
